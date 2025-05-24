@@ -1,0 +1,13 @@
+---
+inherit_gem:
+  rubocop-fnando: .rubocop.yml
+
+plugins:
+  - rubocop-rake
+
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable
+  Exclude:
+    - vendor/**/*
+    - gemfiles/**/*
