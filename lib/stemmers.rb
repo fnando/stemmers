@@ -26,9 +26,14 @@ module Stemmers
   #
   # @param word [String] The word to be stemmed.
   # @param language [String] The language of the word.
+  # @param normalize [Boolean] If true, removes accents from the word after
+  #                            stemming.
   # @return [String] The stemmed word.
-  def self.stem_word(word, language:)
-    Bindings.stem_word(word.downcase.strip, language)
+  def self.stem_word(word, language:, normalize: false)
+    stem = Bindings.stem_word(word, language)
+    stem = stem.unicode_normalize(:nfkd).gsub(/\p{M}/, "") if normalize
+
+    stem
   end
 
   # Stems the given phrase in the specified language.
@@ -36,8 +41,38 @@ module Stemmers
   #
   # @param phrase [String] The phrase to be stemmed.
   # @param language [String] The language of the phrase.
+  # @param clean [Boolean] If true, removes stop words before stemming.
+  # @param normalize [Boolean] If true, removes accents from the phrase
+  #                                 after stemming.
   # @return [Array<String>] An array of stemmed words.
-  def self.stem(phrase, language:)
-    phrase.strip.split(/\s+/).map {|word| stem_word(word, language:) }
+  def self.stem(phrase, language:, clean: false, normalize: false)
+    words = phrase.downcase.strip.split(/\s+/)
+
+    if clean
+      stop_words = stop_words(language)
+      words = words.reject {|word| stop_words.include?(word) }
+    end
+
+    words.map {|word| stem_word(word, language:, normalize:) }
+  end
+
+  # Returns the stop words for the specified language.
+  # If the language is not supported, an empty list is returned.
+  #
+  # @param language [String] The language for which to retrieve stop words.
+  # @return [Array<String>] An array of stop words.
+  def self.stop_words(language)
+    stop_words_cache[language]
+  end
+
+  # Returns a cache of stop words loaded from a JSON file.
+  # The cache is initialized only once and reused for subsequent calls.
+  # @return [Hash<String, Array<String>>] A hash mapping language codes to
+  #                                       arrays of stop words.
+  def self.stop_words_cache
+    @stop_words_cache ||= Hash.new do |hash, key|
+      path = File.join(__dir__, "stemmers/stopwords/#{key}.json")
+      hash[key] = File.file?(path) ? JSON.load_file(path) : []
+    end
   end
 end

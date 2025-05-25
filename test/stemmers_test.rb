@@ -26,7 +26,7 @@ class StemmersTest < Minitest::Test
     assert Stemmers.supported_language?("id")
     assert Stemmers.supported_language?("lt")
     assert Stemmers.supported_language?("ne")
-    assert Stemmers.supported_language?("nb")
+    assert Stemmers.supported_language?("no")
     assert Stemmers.supported_language?("pl")
     assert Stemmers.supported_language?("ro")
     assert Stemmers.supported_language?("tr")
@@ -122,7 +122,7 @@ class StemmersTest < Minitest::Test
   end
 
   test "stems word (nb)" do
-    assert_equal "arbeid", Stemmers.stem_word("arbeider", language: "nb")
+    assert_equal "arbeid", Stemmers.stem_word("arbeider", language: "no")
   end
 
   test "stems word (pl)" do
@@ -172,11 +172,58 @@ class StemmersTest < Minitest::Test
     assert_equal "id", Stemmers.detect_language("terima kasih banyak")
     assert_equal "lt", Stemmers.detect_language("tai yra testas")
     assert_equal "ne", Stemmers.detect_language("तपाईं कस्तो हुनुहुन्छ")
-    assert_equal "nb", Stemmers.detect_language("dette er en test")
+    assert_equal "no", Stemmers.detect_language("dette er en test")
     assert_equal "pl", Stemmers.detect_language("dziękuję bardzo za pomoc")
     assert_equal "ro", Stemmers.detect_language("mulțumesc pentru ajutor")
     assert_equal "tr", Stemmers.detect_language("merhaba nasılsınız")
     assert_equal "yi", Stemmers.detect_language("דאָס איז אַ טעסט")
     assert_nil Stemmers.detect_language("asdfasdfasdf")
+  end
+
+  test "returns stop words" do
+    assert_equal 1298, Stemmers.stop_words("en").size
+    assert_equal 560, Stemmers.stop_words("pt").size
+    assert_equal 632, Stemmers.stop_words("it").size
+    assert_equal 732, Stemmers.stop_words("es").size
+    assert_equal 691, Stemmers.stop_words("fr").size
+    assert_equal 620, Stemmers.stop_words("de").size
+    assert_equal 413, Stemmers.stop_words("nl").size
+    assert_equal 559, Stemmers.stop_words("ru").size
+    assert_equal 418, Stemmers.stop_words("sv").size
+    assert_equal 847, Stemmers.stop_words("fi").size
+    assert_equal 480, Stemmers.stop_words("ar").size
+    assert_equal 45, Stemmers.stop_words("hy").size
+    assert_equal 278, Stemmers.stop_words("ca").size
+    assert_equal 423, Stemmers.stop_words("cs").size
+    assert_equal 170, Stemmers.stop_words("da").size
+    assert_equal 35, Stemmers.stop_words("et").size
+    assert_equal 847, Stemmers.stop_words("el").size
+    assert_equal 225, Stemmers.stop_words("hi").size
+    assert_equal 789, Stemmers.stop_words("hu").size
+    assert_equal 758, Stemmers.stop_words("id").size
+    assert_equal 474, Stemmers.stop_words("lt").size
+    assert_equal 0, Stemmers.stop_words("ne").size
+    assert_equal 221, Stemmers.stop_words("no").size
+    assert_equal 329, Stemmers.stop_words("pl").size
+    assert_equal 434, Stemmers.stop_words("ro").size
+    assert_equal 504, Stemmers.stop_words("tr").size
+    assert_equal 0, Stemmers.stop_words("yi").size
+  end
+
+  test "stems phrase with stop words" do
+    assert_equal %w[test stem],
+                 Stemmers.stem(
+                   "This is me testing stemming", language: "en", clean: true
+                 )
+  end
+
+  test "stems phrase with normalization" do
+    assert_equal %w[aca dinam],
+                 Stemmers.stem(
+                   "Essa é uma ação muito dinâmica",
+                   language: "pt",
+                   clean: true,
+                   normalize: true
+                 )
   end
 end

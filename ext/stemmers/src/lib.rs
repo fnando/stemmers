@@ -28,7 +28,7 @@ fn lang_to_code(lang: Lang) -> Option<String> {
         Lang::Lit => Some("lt".into()),
         Lang::Nep => Some("ne".into()),
         Lang::Nld => Some("nl".into()),
-        Lang::Nob => Some("nb".into()),
+        Lang::Nob => Some("no".into()),
         Lang::Pol => Some("pl".into()),
         Lang::Por => Some("pt".into()),
         Lang::Ron => Some("ro".into()),
@@ -69,7 +69,7 @@ fn stem_word(word: String, language: String) -> Result<String, Error> {
         "id" => Ok(indonesian_tala(&word).to_string()),
         "it" => Ok(italian(&word).to_string()),
         "lt" => Ok(lithuanian_jocas(&word).to_string()),
-        "nb" => Ok(norwegian_bokmal(&word).to_string()),
+        "no" => Ok(norwegian_bokmal(&word).to_string()),
         "ne" => Ok(nepali(&word).to_string()),
         "nl" => Ok(dutch(&word).to_string()),
         "pl" => Ok(polish_yarovoy_unaccented(&word).to_string()),
@@ -89,7 +89,7 @@ fn stem_word(word: String, language: String) -> Result<String, Error> {
 fn is_supported_language(language: String) -> bool {
     [
         "ar", "ca", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "hi", "hu", "hy", "id",
-        "it", "lt", "nb", "ne", "nl", "pl", "pt", "ro", "ru", "sv", "tr", "yi",
+        "it", "lt", "no", "ne", "nl", "pl", "pt", "ro", "ru", "sv", "tr", "yi",
     ]
     .contains(&language.as_str())
 }

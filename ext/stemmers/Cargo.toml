@@ -12,6 +12,5 @@ crate-type = ["cdylib"]
 [dependencies]
 magnus = { version = "0.6.2" }
 rust-stemmers = "1.2.0"
-stop-words = "0.8.1"
 tantivy-stemmers = { version = "0.4.0", features = ["arabic", "armenian_mkrtchyan", "catalan", "czech_dolamic_light", "danish", "dutch", "estonian_freienthal", "finnish", "french", "german", "greek", "hindi_lightweight", "hungarian", "indonesian_tala", "italian", "lithuanian_jocas", "nepali", "norwegian_bokmal", "polish_yarovoy_unaccented", "portuguese", "romanian", "russian", "spanish", "swedish", "turkish_cilden", "yiddish_urieli"] }
 whatlang = "0.16.4"
