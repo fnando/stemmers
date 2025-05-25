@@ -1,12 +1,30 @@
-use lingua::{
-    Language::{
-        Arabic, Danish, Dutch, English, Finnish, French, German, Greek, Hungarian, Italian,
-        Portuguese, Romanian, Russian, Spanish, Swedish, Tamil, Turkish,
-    },
-    LanguageDetectorBuilder,
-};
 use magnus::{exception, function, prelude::*, Error, Ruby};
 use rust_stemmers::{Algorithm, Stemmer};
+use whatlang::{detect, Lang};
+
+fn lang_to_code(lang: Lang) -> Option<String> {
+    match lang {
+        Lang::Eng => Some("en".into()),
+        Lang::Rus => Some("ru".into()),
+        Lang::Spa => Some("es".into()),
+        Lang::Por => Some("pt".into()),
+        Lang::Ita => Some("it".into()),
+        Lang::Fra => Some("fr".into()),
+        Lang::Deu => Some("de".into()),
+        Lang::Ara => Some("ar".into()),
+        Lang::Nob => Some("nb".into()),
+        Lang::Dan => Some("da".into()),
+        Lang::Swe => Some("sv".into()),
+        Lang::Fin => Some("fi".into()),
+        Lang::Tur => Some("tr".into()),
+        Lang::Nld => Some("nl".into()),
+        Lang::Hun => Some("hu".into()),
+        Lang::Ell => Some("el".into()),
+        Lang::Ron => Some("ro".into()),
+        Lang::Tam => Some("ta".into()),
+        _ => None,
+    }
+}
 
 fn get_algorithm(language: &str) -> Option<Algorithm> {
     let algorithm = match language {
@@ -34,19 +52,12 @@ fn get_algorithm(language: &str) -> Option<Algorithm> {
     Some(algorithm)
 }
 
-fn detect_language(text: String, distance: f64) -> Option<String> {
-    let detector = LanguageDetectorBuilder::from_languages(&[
-        Arabic, Danish, Dutch, English, Finnish, French, German, Greek, Hungarian, Italian,
-        Portuguese, Romanian, Russian, Spanish, Swedish, Tamil, Turkish,
-    ])
-    .with_minimum_relative_distance(distance)
-    .build();
-
-    let Some(language) = detector.detect_language_of(text) else {
+fn detect_language(text: String) -> Option<String> {
+    let Some(info) = detect(&text) else {
         return None;
     };
 
-    Some(format!("{}", language.iso_code_639_1().to_string()))
+    lang_to_code(info.lang())
 }
 
 fn stem_word(word: String, language: String) -> Result<String, Error> {
@@ -70,7 +81,7 @@ fn init(ruby: &Ruby) -> Result<(), Error> {
     let root = ruby.define_module("Stemmers")?;
     let module = root.define_module("Bindings")?;
     module.define_singleton_method("stem_word", function!(stem_word, 2))?;
-    module.define_singleton_method("detect_language", function!(detect_language, 2))?;
+    module.define_singleton_method("detect_language", function!(detect_language, 1))?;
     module.define_singleton_method("supported_language?", function!(is_supported_language, 1))?;
     Ok(())
 }

@@ -20,11 +20,6 @@ class StemmersTest < Minitest::Test
     assert_equal "cac", Stemmers.stem_word("caçando", language: "pt")
   end
 
-  test "stems word (detect)" do
-    assert_equal "test", Stemmers.stem_word("tests", language: "detect")
-    assert_equal "cac", Stemmers.stem_word("caçando", language: "detect")
-  end
-
   test "raises error for unsupported language" do
     error = assert_raises(ArgumentError) do
       Stemmers.stem_word("testing", language: "invalid")

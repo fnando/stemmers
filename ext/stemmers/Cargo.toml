@@ -10,6 +10,6 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-lingua = { version = "1.7.1", default-features = false, features = ["arabic", "danish", "german", "greek", "english", "spanish", "finnish", "french", "hungarian", "italian", "dutch", "portuguese", "romanian", "russian", "swedish", "tamil", "turkish"] }
 magnus = { version = "0.6.2" }
 rust-stemmers = "1.2.0"
+whatlang = "0.16.4"
