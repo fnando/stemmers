@@ -34,7 +34,7 @@ Stemmers.detect_language("Olá, mundo!")
 #=> "pt"
 ```
 
-To stem a word, you can use the `Stemmers.stem_word(word, language:)` method.
+To stem a word, you can use the `Stemmers.stem_word(word, **options)` method.
 
 ```ruby
 require "stemmers"
@@ -46,7 +46,18 @@ Stemmers.stem_word("correndo", language: "pt")
 #=> "corr"
 ```
 
-To stem a phrase, you can use `Stemmers.stem(input, language:)`.
+You have a few options when stemming a word with
+`Stemmers.stem_word(input, **options)`:
+
+- `language`: The language to use for stemming. If not provided, it will try to
+  detect the language.
+- `normalize`: If set to `true`, it will normalize the word after stemming. This
+  is useful for languages that have diacritics or special characters.
+- `lowercase`: If set to `true`, it will lowercase the word before stemming
+  (stemming requires lowercase strings, but this is not done automatically to
+  avoid unnecessary transformations when using `Stemmers.stem(phrase)`.
+
+To stem a phrase, you can use `Stemmers.stem(input, **options)`.
 
 ```ruby
 require "stemmers"
@@ -54,6 +65,21 @@ require "stemmers"
 Stemmers.stem("Testing this phrase", language: "en")
 #=> ["test", "this", "phrase"]
 ```
+
+The `Stemmers.stem(input, **options)` method has the following options:
+
+- `language`: The language to use for stemming. If not provided, it will try to
+  detect the language.
+- `normalize`: If set to `true`, it will normalize the word after stemming. This
+  is useful for languages that have diacritics or special characters.
+- `lowercase`: If set to `true`, it will lowercase the word before stemming
+  (stemming requires lowercase strings, but this is not done automatically to
+  avoid unnecessary transformations when using `Stemmers.stem(phrase)`).
+- `clean`: If set to `true`, it will remove stop words from the phrase (beware
+  that you may end up with an empty array). It uses the list of stop words from
+  <https://github.com/stopwords-iso/stopwords-iso> (it's not a great list—it has
+  too much surprising words that shouldn't be in the list, but I couldn't find
+  anything better).
 
 ## Development
 

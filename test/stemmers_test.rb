@@ -33,6 +33,16 @@ class StemmersTest < Minitest::Test
     assert Stemmers.supported_language?("yi")
   end
 
+  test "lowercases word before stemming" do
+    assert_equal "test",
+                 Stemmers.stem_word("Testing", language: "en", lowercase: true)
+  end
+
+  test "normalizes word after stemming" do
+    assert_equal "maca",
+                 Stemmers.stem_word("maçã", language: "pt", normalize: true)
+  end
+
   test "stems word (en)" do
     assert_equal "test", Stemmers.stem_word("testing", language: "en")
   end

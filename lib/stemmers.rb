@@ -26,10 +26,13 @@ module Stemmers
   #
   # @param word [String] The word to be stemmed.
   # @param language [String] The language of the word.
+  # @param lowercase [Boolean] If true, converts the word to lowercase before
+  #                            stemming.
   # @param normalize [Boolean] If true, removes accents from the word after
   #                            stemming.
   # @return [String] The stemmed word.
-  def self.stem_word(word, language:, normalize: false)
+  def self.stem_word(word, language:, normalize: false, lowercase: false)
+    word = word.downcase if lowercase
     stem = Bindings.stem_word(word, language)
     stem = normalize_word(stem) if normalize
 
