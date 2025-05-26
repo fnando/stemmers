@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Nando Vieira"]
   spec.email = ["me@fnando.com"]
 
-  spec.summary = "Bindings some popular snowball stemming algorithms"
-  spec.description = "Bindings some popular snowball stemming algorithms"
+  spec.summary = "Stemming and language detection bindings for Ruby"
+  spec.description = spec.summary
   spec.homepage = "https://github.com/fnando/stemmers"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.4.0"
