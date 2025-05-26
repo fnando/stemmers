@@ -31,7 +31,7 @@ module Stemmers
   # @return [String] The stemmed word.
   def self.stem_word(word, language:, normalize: false)
     stem = Bindings.stem_word(word, language)
-    stem = stem.unicode_normalize(:nfkd).gsub(/\p{M}/, "") if normalize
+    stem = normalize_word(stem) if normalize
 
     stem
   end
@@ -63,6 +63,16 @@ module Stemmers
   # @return [Array<String>] An array of stop words.
   def self.stop_words(language)
     stop_words_cache[language]
+  end
+
+  # Normalizes a word by removing accents and diacritics.
+  # This is useful for languages where accents do not change the meaning
+  # of the word, such as Portuguese.
+  #
+  # @param word [String] The word to be normalized.
+  # @return [String] The normalized word with accents removed.
+  def self.normalize_word(word)
+    word.unicode_normalize(:nfkd).gsub(/\p{M}/, "")
   end
 
   # Returns a cache of stop words loaded from a JSON file.
