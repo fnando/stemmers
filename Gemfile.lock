@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stemmers (0.0.0)
+    stemmers (0.0.1)
       rb_sys (~> 0.9.91)
 
 GEM
